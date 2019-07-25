@@ -1,0 +1,5 @@
+*.pyc
+*.ipynb_checkpoints
+__pycache__
+.vscode/
+coco.json
