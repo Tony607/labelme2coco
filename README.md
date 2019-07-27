@@ -9,4 +9,4 @@ python labelme2coco.py images
 Then you can run the following Jupyter notebook to visualize the coco annotations. `COCO_Image_Viewer.ipynb`
 
 
-Further instruction on how to create your own datasets, read the [tutorial]().
+Further instruction on how to create your own datasets, read the [tutorial](https://www.dlology.com/blog/how-to-create-custom-coco-data-set-for-instance-segmentation/).
