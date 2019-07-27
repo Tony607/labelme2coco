@@ -2,7 +2,6 @@ import os
 import argparse
 import json
 
-# import cv2
 from labelme import utils
 import numpy as np
 import glob
@@ -20,7 +19,6 @@ class labelme2coco(object):
         self.images = []
         self.categories = []
         self.annotations = []
-        # self.data_coco = {}
         self.label = []
         self.annID = 1
         self.height = 0
@@ -36,7 +34,7 @@ class labelme2coco(object):
                 for shapes in data["shapes"]:
                     label = shapes["label"].split("_")
                     if label not in self.label:
-                        self.categories.append(self.categorie(label))
+                        self.categories.append(self.category(label))
                         self.label.append(label)
                     points = shapes["points"]
                     self.annotations.append(self.annotation(points, label, num))
@@ -57,12 +55,12 @@ class labelme2coco(object):
 
         return image
 
-    def categorie(self, label):
-        categorie = {}
-        categorie["supercategory"] = label[0]
-        categorie["id"] = len(self.label) + 1
-        categorie["name"] = label[0]
-        return categorie
+    def category(self, label):
+        category = {}
+        category["supercategory"] = label[0]
+        category["id"] = len(self.label) + 1
+        category["name"] = label[0]
+        return category
 
     def annotation(self, points, label, num):
         annotation = {}
@@ -150,7 +148,9 @@ if __name__ == "__main__":
         help="Directory to labelme images and annotation json files.",
         type=str,
     )
-    parser.add_argument("--output", help="Output json file path.", default="coco.json")
+    parser.add_argument(
+        "--output", help="Output json file path.", default="trainval.json"
+    )
     args = parser.parse_args()
     labelme_json = glob.glob(os.path.join(args.labelme_images, "*.json"))
     labelme2coco(labelme_json, args.output)

@@ -2,4 +2,4 @@
 *.ipynb_checkpoints
 __pycache__
 .vscode/
-coco.json
+trainval.json
