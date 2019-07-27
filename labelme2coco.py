@@ -1,6 +1,7 @@
 import os
 import argparse
 import json
+
 # import cv2
 from labelme import utils
 import numpy as np
@@ -66,8 +67,9 @@ class labelme2coco(object):
     def annotation(self, points, label, num):
         annotation = {}
         contour = np.array(points)
-        # area = cv2.contourArea(contour)
-        area = 1
+        x = contour[:, 0]
+        y = contour[:, 1]
+        area = 0.5 * np.abs(np.dot(x, np.roll(y, 1)) - np.dot(y, np.roll(x, 1)))
         annotation["segmentation"] = [list(np.asarray(points).flatten())]
         annotation["iscrowd"] = 0
         annotation["area"] = area
