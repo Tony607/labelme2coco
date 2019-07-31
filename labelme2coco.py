@@ -34,11 +34,17 @@ class labelme2coco(object):
                 for shapes in data["shapes"]:
                     label = shapes["label"].split("_")
                     if label not in self.label:
-                        self.categories.append(self.category(label))
                         self.label.append(label)
                     points = shapes["points"]
                     self.annotations.append(self.annotation(points, label, num))
                     self.annID += 1
+
+        # Sort all text labels so they are in the same order across data splits.
+        self.label.sort()
+        for label in self.label:
+            self.categories.append(self.category(label))
+        for annotation in self.annotations:
+            annotation["category_id"] = self.getcatid(annotation["category_id"])
 
     def image(self, data, num):
         image = {}
@@ -58,7 +64,7 @@ class labelme2coco(object):
     def category(self, label):
         category = {}
         category["supercategory"] = label[0]
-        category["id"] = len(self.label) + 1
+        category["id"] = len(self.categories)
         category["name"] = label[0]
         return category
 
@@ -75,15 +81,16 @@ class labelme2coco(object):
 
         annotation["bbox"] = list(map(float, self.getbbox(points)))
 
-        annotation["category_id"] = self.getcatid(label)
+        annotation["category_id"] = label[0]  # self.getcatid(label)
         annotation["id"] = self.annID
         return annotation
 
     def getcatid(self, label):
         for category in self.categories:
-            if label[0] == category["name"]:
+            if label == category["name"]:
                 return category["id"]
-        print("label: {} not in categories.".format(label))
+        print("label: {} not in categories: {}.".format(label, self.categories))
+        exit()
         return -1
 
     def getbbox(self, points):
