@@ -50,7 +50,7 @@ class labelme2coco(object):
         image = {}
         binhex = data.get("imageData")
         if binhex:
-            img = utils.img_b64_to_arr()
+            img = utils.img_b64_to_arr(binhex)
             height, width = img.shape[:2]
             img = None
         else:
