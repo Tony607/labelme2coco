@@ -48,9 +48,14 @@ class labelme2coco(object):
 
     def image(self, data, num):
         image = {}
-        img = utils.img_b64_to_arr(data["imageData"])
-        height, width = img.shape[:2]
-        img = None
+        binhex = data.get("imageData")
+        if binhex:
+            img = utils.img_b64_to_arr()
+            height, width = img.shape[:2]
+            img = None
+        else:
+            height = data['imageHeight']
+            width = data['imageWidth']
         image["height"] = height
         image["width"] = width
         image["id"] = num
